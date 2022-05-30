@@ -1,0 +1,16 @@
+legal:
+  - LICENSE.txt
+docs:
+  - README.md
+  - docs/**/*
+projectconfig:
+  - .editorconfig
+  - .github
+  - .run
+  - .gitignore
+gradle-wrapper:
+  - .gradle/**/*
+  - gradle
+  - gradle.bat
+gradle:
+  - "**/build.gradle.kts"

@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright 2022 mbo.dev
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>rs256</title>
+    <meta name="description" content="Simple tool to create rs256 based jwt.">
+    <meta name="author" content="mbodev">
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
+<body>
+<h1>RS256 JWT Tool</h1>
+<div th:switch="${message}">
+    <div th:case="'success'" class="alert alert-success">
+        <strong>Success!</strong> Operation performed successfully.
+    </div>
+    <div th:case="'failure'" class="alert alert-danger">
+        <strong>Failure!</strong> Operation failed. Please try again
+    </div>
+</div>
+<div id="in-form">
+    <form action="#" th:action="@{/rs256}" th:object="${body}" method="post">
+        <p>
+            <input type="submit" value="Submit"/>&nbsp;
+        </p>
+        <p>
+            <label for="in-header">header:</label>&nbsp;
+            <textarea id="in-header" th:field="*{header}" rows="4" cols="80" required></textarea>
+        </p>
+        <p>
+            <label for="in-payload">payload:</label>&nbsp;
+            <textarea id="in-payload" th:field="*{payload}" rows="10" cols="80" required></textarea>
+        </p>
+        <p>
+            <label for="in-privkey">privkey:</label>&nbsp;
+            <textarea id="in-privkey" th:field="*{privkey}" rows="4" cols="80" required></textarea>
+        </p>
+        <p>
+            <label for="in-pubkey">pubkey:</label>&nbsp;
+            <textarea id="in-pubkey" th:field="*{pubkey}" rows="4" cols="80" required></textarea>
+        </p>
+        <p>
+            <input type="submit" value="Submit"/>&nbsp;
+        </p>
+    </form>
+</div>
+<div id="out-result" th:if="${result}">
+    <h2>JWT</h2>
+    <div id="jwt" th:text="${result}">result</div>
+    <button onclick="navigator.clipboard.writeText(document.getElementById('jwt').innerHTML);">Copy to clipboard</button>
+</div>
+<div id="hints">
+    <h2>How to generate a keypair:</h2>
+    openssl genrsa -out privkey.pem 2048<br/>
+    openssl rsa -pubout -in privkey.pem -out pubkey.pem<br/>
+    <br/>
+    # convert private key to pkcs8 format in order to use it in the form above<br/>
+    openssl pkcs8 -topk8 -in privkey.pem -inform pem -out privkey_pkcs8.pem -outform pem -nocrypt<br/>
+    <br/>
+    # for revolut create a certificate like this:<br/>
+    openssl req -new -x509 -key privkey.pem -out cert.pem -days 1825 -subj "/C=AT/ST=Vienna/L=Vienna/O=mbo.dev/OU=IT Department/CN=mbo.dev"<br/>
+</div>
+</body>
+</html>

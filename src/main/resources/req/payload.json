@@ -1,0 +1,6 @@
+{
+  "iss": "https://mbo.dev",
+  "sub": "<client_id>",
+  "aud": "https://revolut.com",
+  "exp": 2285089130
+}
